@@ -4,10 +4,6 @@
   <nav class="grey darken-3">
     <div class="nav-wrapper">
       <a href="#!" class="left tit brand-logo">Spotify Minimal</a>
-      <ul class="right ">
-        <li><a href="sass.html"><i class="material-icons">search</i></a></li>
-        <li><a href="mobile.html"><i class="material-icons">more_vert</i></a></li>
-      </ul>
     </div>
   </nav>
 </div>

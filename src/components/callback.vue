@@ -2,24 +2,33 @@
   <div>
     <Navbar />
     <!-- Page Layout here -->
-    <div class="row margen">
+    <div class="row center">
+      <br />
       <div class="col s12 m3">
-        <!-- navigation panel -->
-        <div class="row center">
-          <div class="col s12 m12 bordeCol">
-            <img class="imagen" :src="this.imagen" alt="perfil" />
-          </div>
-          <div class="col s12 m12">
+        <img class="imagen" :src="this.imagen" alt="perfil" />
+      </div>
+      <div class="col s12 m7">
+        <div class="row">
+          <div class="col s12 m6">
             <h5>{{ nombre }}</h5>
           </div>
-          <div class="col s12 m12">
-            <h6><a :href="cuenta" target="black">Cuenta</a></h6>
+
+          <div class="col s12 m6">
+            <h5><a :href="cuenta" target="black">Cuenta</a></h5>
           </div>
         </div>
       </div>
-
-      <div class="col s12 m6">
-        <!-- page content  -->
+      <!-- Seccion playlist -->
+      <div class="col s12 m12">
+        <hr />
+        <h2>Playlist</h2>
+        <br />
+      </div>
+      <div v-for="(item, index) in playlist" :key="index" class="col s6 m3">
+        <img class="portada" :src="item.portada" alt="perfil" />
+        <a @click="playListList(item.id)" class="play waves-effect waves-light grey darken-3 btn">{{
+          item.nombre
+        }}</a>
       </div>
     </div>
   </div>
@@ -35,9 +44,13 @@ export default {
       nombre: "",
       cuenta: "",
       imagen: "",
+      playlist: [],
+      imgPla: "",
+      
     };
   },
   methods: {
+    // Recordar cuenta
     reload() {
       var param = this.$route.hash.split("=");
       axios
@@ -48,7 +61,6 @@ export default {
           },
         })
         .then((response) => {
-          //console.log(response.data);
           this.nombre = response.data.display_name;
           this.cuenta = response.data.external_urls.spotify;
           this.imagen = response.data.images[0].url;
@@ -57,6 +69,7 @@ export default {
           console.log("session expirada");
         });
     },
+    // Playlist disponibles
     playList() {
       var param = this.$route.hash.split("=");
       axios
@@ -67,11 +80,36 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response.data);
+          console.log(response.data.items[0].id);
+          //   sacar solo las variables que sE necEsitan
+          var play = response.data.items;
+          for (let i in play) {
+            for (let j in play[i].images) {
+              if (j == 0) {
+                this.playlist.push({
+                  id: play[i].id,
+                  nombre: play[i].name,
+                  portada: play[i].images[j].url,
+                });
+              }
+            }
+          }
         })
-        .catch(() => {
-          console.log("session expirada");
+        .catch((e) => {
+          console.log("session expirada", e);
         });
+    },
+    playListList(id){
+      var param = this.$route.hash.split("=");
+        axios
+        .get(`https://api.spotify.com/v1/playlists/${id}`, {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: "Bearer " + param[1],
+          },
+        }).then(data =>{
+            console.log(data.data)
+        })
     },
   },
   mounted() {
@@ -87,12 +125,27 @@ export default {
 .margen {
   padding: 0;
   margin: 2em;
+  background-color: #fff;
 }
 .imagen {
-  max-width: 6em;
+  width: 40%;
   border-radius: 50%;
 }
-.bordeCol {
-  border-right: 1px solid #eeeeee;
+.play {
+  margin: 0.5em 0;
+  width: 100%;
+}
+.portada {
+  width: 100%;
+}
+.center {
+  text-align: center;
+}
+.x {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
 }
 </style>

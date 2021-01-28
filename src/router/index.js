@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import login from '@/components/Login'
 import Home from '@/components/Home'
-import callback from '@/components/callback'
+import play from '@/components/Playlist'
 
 Vue.use(VueRouter)
 export default new VueRouter({
@@ -11,6 +11,6 @@ export default new VueRouter({
         { path: '/', name: 'login', component: login },
         { path: '/login', name: 'login2', component: login },
         { path: '/home', name: 'home', component: Home },
-        { path: '/callback', name: 'callback', component: callback },
+        { path: '/play/:id', name: 'play', component: play },
       ]
 })

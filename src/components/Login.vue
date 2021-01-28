@@ -18,7 +18,7 @@ export default {
       code: "",
       scopes:
         "user-read-private user-read-email playlist-read-private playlist-modify-public playlist-modify-private user-library-read",
-      redirect_uri: "http://localhost:8080/callback",
+      redirect_uri: "http://localhost:8080/home",
       me: null,
       pay: "",
     };

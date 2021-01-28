@@ -3,26 +3,26 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
-        me: []
+        token: ''
       },
       mutations: {
-          SET_ME: (state, mearray )=>{
-              state.me = mearray
-              localStorage.setItem("itsMe", mearray);
+          SET_token: (state, token )=>{
+              state.token = token
+              localStorage.setItem("itstoken", token);
           },
           CLEAR: state => {
-            state.me = [];
-            localStorage.removeItem("itsMe");
+            state.token = [];
+            localStorage.removeItem("itstoken");
           },
           LOAD: state => {
-            state.me = localStorage.getItem("itsMe");
+            state.token = localStorage.getItem("itstoken");
           }
       },
       actions: {
       },
       getters: {
-        me (state) {
-          return state.me
+        token (state) {
+          return state.token
         }
       }
 })
