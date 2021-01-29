@@ -4,7 +4,6 @@
     <a @click="login" class="blue-grey darken-4 waves-effect waves-light btn"
       ><i class="material-icons right">send</i>Login with Spotify</a
     >
-    <button @click="refresh">refrescar</button>
   </div>
 </template>
 
@@ -25,7 +24,7 @@ export default {
   },
   methods: {
     login() {
-window.location.replace(
+      window.location.replace(
         `https://accounts.spotify.com/authorize?client_id=${this.client_id}&response_type=token&redirect_uri=${this.redirect_uri}&scope=${this.scopes}&show_dialog=true`,
         "Login with Spotify",
         "width=800,height=600"
@@ -35,7 +34,6 @@ window.location.replace(
         // alert(payload)
         this.code = payload;
         console.log(payload);
-
 
         fetch("https://api.spotify.com/v1/me", {
           headers: {
@@ -56,12 +54,11 @@ window.location.replace(
       fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         headers: {
-          Authorization: this.code
+          Authorization: this.code,
         },
         body: {
           grant_type: "refresh_token",
           redirect_uri: this.redirect_uri,
-          
         },
       });
     },

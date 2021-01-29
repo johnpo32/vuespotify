@@ -21,10 +21,7 @@
           ></iframe>
         </div>
         <div class="modal-footer">
-          <a
-            @click="pause"
-            href="#!"
-            class="modal-close waves-effect waves-green btn-flat"
+          <a href="#!" class="modal-close waves-effect waves-green btn-flat"
             >Ok</a
           >
         </div>
@@ -89,22 +86,6 @@ export default {
       this.seleccion = id;
     },
 
-    pause() {
-      this.$store.commit("LOAD");
-      axios
-        .put("https://api.spotify.com/v1/me/player/currently-playing", {
-          headers: {
-            Authorization: "Bearer " + this.$store.getters.token,
-            "Content-Type": "application/json",
-          },
-        })
-        .then((log) => {
-          console.log(log);
-        })
-        .catch((er) => {
-          console.log(er);
-        });
-    },
     playListList() {
       this.$store.commit("LOAD");
       axios
@@ -130,6 +111,10 @@ export default {
               duracion: (array[i].track.duration_ms / 60000).toFixed(2),
             });
           }
+        })
+        .catch(() => {
+          this.$store.commit("CLEAR");
+          this.$router.push("/login");
         });
     },
   },
@@ -140,9 +125,7 @@ export default {
 </script>
 
 <style>
-.principal {
-  background-color: #fff;
-}
+
 .pos {
   vertical-align: middle;
   margin-right: 0.2em;

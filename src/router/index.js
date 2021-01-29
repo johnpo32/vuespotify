@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import login from '@/components/Login'
 import Home from '@/components/Home'
 import play from '@/components/Playlist'
+import playcrud from '@/components/PlayCrud'
 
 Vue.use(VueRouter)
 export default new VueRouter({
@@ -12,5 +13,6 @@ export default new VueRouter({
         { path: '/login', name: 'login2', component: login },
         { path: '/home', name: 'home', component: Home },
         { path: '/play/:id', name: 'play', component: play },
+        { path: '/playcrud', name: 'playcrud', component: playcrud },
       ]
 })

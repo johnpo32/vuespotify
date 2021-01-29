@@ -16,7 +16,10 @@ export default {
 <style lang="scss">
 #app, body{
   height: 100%;
-  background-color: #fafafa;
-}
+  background-color: #f5f5f5;
+}   
 $color: red;
+.principal {
+  background-color: #fff;
+}
 </style>

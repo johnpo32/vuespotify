@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="principal">
     <Navbar />
     <!-- Page Layout here -->
     <div class="row center">
@@ -9,31 +9,36 @@
       </div>
       <div class="col s12 m7">
         <div class="row">
-          <div class="col s12 m6">
-            <h5>{{ nombre }}</h5>
+          <div class="col s12 m4">
+            <h6>{{ nombre }}</h6>
+            <hr />
           </div>
-
-          <div class="col s12 m6">
-            <h5><a :href="cuenta" target="black">Cuenta</a></h5>
+          <div class="col s12 m4">
+            <h6><a :href="cuenta" target="black">Cuenta</a></h6>
+            <hr />
+          </div>
+          <div class="col s12 m4">
+            <a
+              @click="goCrud"
+              class="waves-effect waves-light btn modal-trigger"
+              >PlayList</a
+            >
           </div>
         </div>
       </div>
+
       <!-- Seccion playlist -->
       <div class="col s12 m12">
-        <hr />
         <h2>Playlist</h2>
         <br />
       </div>
       <div v-for="(item, index) in playlist" :key="index" class="col s6 m3">
         <img class="portada" :src="item.portada" alt="perfil" />
-         
         <a
+          @click="goPlayList(item.id)"
           class="play waves-effect waves-light grey darken-3 btn"
-          ><router-link :to="{name: 'play' , params:{ id: item.id }}">{{ item.nombre}}</router-link></a
+          >{{ item.nombre }}</a
         >
-        
-      </div>
-      <div>
       </div>
     </div>
   </div>
@@ -54,8 +59,17 @@ export default {
     };
   },
   methods: {
+    // ruta crud
+    goCrud() {
+      this.$router.push("/playcrud");
+    },
+    // ruta playlist
+    goPlayList(id) {
+      this.$router.push("play/" + id);
+    },
     // Recordar cuenta
     reload() {
+      this.$store.commit("LOAD");
       var param = this.$route.hash.split("=");
       axios
         .get("https://api.spotify.com/v1/me", {
@@ -65,18 +79,24 @@ export default {
           },
         })
         .then((response) => {
+          console.log(response.data.id);
+          this.$store.commit("SET_token", param[1]);
+          this.$store.commit("SET_ID", response.data.id);
           this.nombre = response.data.display_name;
           this.cuenta = response.data.external_urls.spotify;
           this.imagen = response.data.images[0].url;
         })
         .catch(() => {
           console.log("session expirada");
+          // bORRAR DATOS DEL STORE
+          this.$store.commit("CLEAR");
+          this.$router.push("/login");
         });
     },
     // Playlist disponibles
     playList() {
       var param = this.$route.hash.split("=");
-      this.$store.commit("SET_token", param[1]);
+
       axios
         .get("https://api.spotify.com/v1/me/playlists", {
           headers: {
@@ -104,11 +124,11 @@ export default {
           console.log("session expirada", e);
         });
     },
-
   },
   mounted() {
     this.reload();
     this.playList();
+    console.log(this.$store.getters.token);
     // var param = this.$route.hash.split("=");
     // console.log(param[1]);
   },
@@ -116,6 +136,10 @@ export default {
 </script>
 
 <style>
+#link,
+#a {
+  color: bisque;
+}
 .margen {
   padding: 0;
   margin: 2em;
