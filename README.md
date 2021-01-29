@@ -7,6 +7,8 @@ this project works with Spotify api
 docker-compose up
 
 ```
+go to http://localhost:8080/
+
 that only
 
 
