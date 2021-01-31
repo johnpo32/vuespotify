@@ -1,17 +1,20 @@
 <template>
   <div class="principal">
-    <Navbar />
     <div class="row">
       <br />
       <!-- retroceder pagina -->
       <div class="col s6">
-        <router-link :to="'/home#access_token=' + $store.getters.token"
+        <router-link
+          class="btn grey darken-3"
+          :to="'/home#access_token=' + $store.getters.token"
           ><i class="small material-icons">keyboard_arrow_left</i></router-link
         >
       </div>
       <!-- crear playlist -->
       <div class="col">
-        <a class="waves-effect waves-light btn modal-trigger" href="#modal1"
+        <a
+          class="waves-effect waves-light btn modal-trigger grey darken-3 btn"
+          href="#modal1"
           >crear Playlist</a
         >
       </div>
@@ -40,12 +43,11 @@
       </div>
       <!-- fin modal -->
       <div class="col s12 m12">
-        <hr />
         <h4>Disponibles</h4>
-        <br />
       </div>
       <!-- array con playlist -->
-      <div v-for="(item, index) in datos" :key="index" class="col s6 m4">
+      <div v-for="(item, index) in datos" :key="index" class="col s6 m3">
+        <br />
         <h6>{{ item.nombre }}</h6>
         <img class="portada" :src="item.portada" alt="perfil" />
         <a class="waves-effect waves-light grey darken-3 btn"
@@ -60,9 +62,8 @@
 </template>
 
 <script>
-import Navbar from "./Navbar";
+import M from "materialize-css";
 export default {
-  components: { Navbar },
   data() {
     return {
       datos: [],
@@ -85,7 +86,7 @@ export default {
           this.$router.push("/login");
         })
         .then((response) => {
-          console.log("Success:", response.items[3].images[0]);
+          console.log("Success:", response);
           //   Llenamos el arrAY con solo la informacion necesaria
           var array = response.items;
           for (let i in array) {
@@ -126,6 +127,7 @@ export default {
   },
   mounted() {
     this.verDisponibles();
+    M.AutoInit();
   },
 };
 </script>

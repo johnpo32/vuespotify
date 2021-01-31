@@ -1,15 +1,14 @@
 <template>
   <div class="principal">
-    <Navbar />
     <div class="row">
       <br />
       <div class="col s12">
-        <router-link :to="'/home#access_token=' + $store.getters.token"
+        <router-link class="btn grey darken-3" :to="'/home#access_token=' + $store.getters.token"
           ><i class="small material-icons">keyboard_arrow_left</i></router-link
         >
       </div>
-      <!-- Modal Structure -->
-      <div id="modal1" class="modal bottom-sheet">
+      <!-- Modal Structura -->
+      <div id="modal1" ref="modal" class="modal bottom-sheet">
         <div class="modal-content">
           <iframe
             :src="'https://open.spotify.com/embed/track/' + seleccion"
@@ -26,14 +25,17 @@
           >
         </div>
       </div>
+      <!-- Titulo del playlist -->
       <div class="col s12 m6">
         <h1>{{ playtitulo }}</h1>
       </div>
+      <!-- Caratula del playlist -->
       <div class="col s6 m4">
         <img class="portad" :src="portada" alt="default" />
       </div>
-      <div class="col s12">
-        <table>
+      <!-- Tabla con listado musical -->
+      <div class="col s12 highlight responsive-table">
+        <table >
           <thead>
             <tr>
               <th></th>
@@ -45,8 +47,8 @@
 
           <tbody class="text">
             <tr v-for="(item, index) in lista" :key="index">
-              <td><img :src="item.caratula" alt="" /></td>
-              <td>
+              <td ><a @click="send(item.id)" class="waves-effect waves-light modal-trigger" href="#modal1"><img :src="item.caratula" alt="" /></a></td>
+              <td >
                 <a
                   @click="send(item.id)"
                   class="waves-effect waves-light modal-trigger"
@@ -67,7 +69,7 @@
 
 <script>
 import axios from "axios";
-import Navbar from "./Navbar";
+import M from 'materialize-css'
 export default {
   data() {
     return {
@@ -77,15 +79,12 @@ export default {
       seleccion: "",
     };
   },
-  components: {
-    Navbar,
-  },
+
   methods: {
     //   mandar id de cancion
     send(id) {
       this.seleccion = id;
     },
-
     playListList() {
       this.$store.commit("LOAD");
       axios
@@ -100,7 +99,7 @@ export default {
           this.playtitulo = data.data.name;
           this.portada = data.data.images[0].url;
           //   this.lista = data.data.tracks.items;
-          //   llenar arraY con la informacion necesario
+          //   llenar arraY con la informacion necesaria
           var array = data.data.tracks.items;
           for (let i in array) {
             this.lista.push({
@@ -119,19 +118,22 @@ export default {
     },
   },
   mounted() {
+    console.log(this.$refs.modal)
+      M.AutoInit()
     this.playListList();
   },
 };
 </script>
 
 <style>
-
 .pos {
   vertical-align: middle;
   margin-right: 0.2em;
 }
 .text {
   text-overflow: ellipsis;
+  font-size: 1.1em;
+  color:#fff;
 }
 .portad {
   width: 80%;

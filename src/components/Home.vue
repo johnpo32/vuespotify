@@ -1,36 +1,21 @@
 <template>
   <div class="principal">
-    <Navbar />
-    <!-- Page Layout here -->
+    <!-- Barra Nav -->
+
+    <!-- Page Layout  -->
     <div class="row center">
       <br />
-      <div class="col s12 m3">
-        <img class="imagen" :src="this.imagen" alt="perfil" />
+      <!-- ruta Crud PlayList -->
+      <div class="col s12 m4">
+        <a
+          @click="goCrud"
+          class="waves-effect waves-light btn modal-trigger grey darken-3"
+          >PlayList</a
+        >
       </div>
-      <div class="col s12 m7">
-        <div class="row">
-          <div class="col s12 m4">
-            <h6>{{ nombre }}</h6>
-            <hr />
-          </div>
-          <div class="col s12 m4">
-            <h6><a :href="cuenta" target="black">Cuenta</a></h6>
-            <hr />
-          </div>
-          <div class="col s12 m4">
-            <a
-              @click="goCrud"
-              class="waves-effect waves-light btn modal-trigger"
-              >PlayList</a
-            >
-          </div>
-        </div>
-      </div>
-
-      <!-- Seccion playlist -->
+      <!-- Seccion Listado playlist -->
       <div class="col s12 m12">
-        <h2>Playlist</h2>
-        <br />
+        <h3>Playlist</h3>
       </div>
       <div v-for="(item, index) in playlist" :key="index" class="col s6 m3">
         <img class="portada" :src="item.portada" alt="perfil" />
@@ -46,9 +31,7 @@
 
 <script>
 import axios from "axios";
-import Navbar from "./Navbar";
 export default {
-  components: { Navbar },
   data() {
     return {
       nombre: "",
@@ -79,12 +62,14 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response.data.id);
+          // Informacion para el Store y Renderizacion
           this.$store.commit("SET_token", param[1]);
           this.$store.commit("SET_ID", response.data.id);
           this.nombre = response.data.display_name;
           this.cuenta = response.data.external_urls.spotify;
           this.imagen = response.data.images[0].url;
+          this.$store.commit("SET_IMAGEN", this.imagen);
+          this.$store.commit("SET_NOMBRE", this.nombre);
         })
         .catch(() => {
           console.log("session expirada");
@@ -96,7 +81,6 @@ export default {
     // Playlist disponibles
     playList() {
       var param = this.$route.hash.split("=");
-
       axios
         .get("https://api.spotify.com/v1/me/playlists", {
           headers: {
@@ -105,7 +89,7 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response.data.items[0].id);
+          // console.log(response.data.items[0].id);
           //   sacar solo las variables que sE necEsitan
           var play = response.data.items;
           for (let i in play) {
@@ -124,21 +108,54 @@ export default {
           console.log("session expirada", e);
         });
     },
+    // refresh() {
+    //   fetch(`https://accounts.spotify.com/api/token`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/x-www-form-urlencoded",
+    //       Authorization:
+    //         "Basic " +
+    //         (
+    //           "d267cedeee0f49f7aa8a7d78dc43ab47" +
+    //           ":" +
+    //           "7937a13f48b04234a89e80afbc0a7b00"
+    //         ).toString("base64"),
+    //     },
+    //     body: JSON.stringify({
+    //       grant_type: "refresh_token",
+    //       refresh_token: this.$store.getters.token,
+    //     }),
+    //   })
+    //     .then((res) => res.json())
+    //     .catch((err) => {
+    //       console.log(err);
+    //     })
+    //     .then((response) => {
+    //       console.log(response);
+    //     });
+    // },
   },
   mounted() {
     this.reload();
     this.playList();
-    console.log(this.$store.getters.token);
-    // var param = this.$route.hash.split("=");
-    // console.log(param[1]);
   },
 };
 </script>
 
 <style>
-#link,
-#a {
-  color: bisque;
+h2,
+h1,
+h4,
+a,
+h3,
+th,
+h6,
+.cu {
+  color: #fff;
+  font-weight: 900;
+}
+.principal {
+  background-color: #212121;
 }
 .margen {
   padding: 0;
@@ -158,12 +175,5 @@ export default {
 }
 .center {
   text-align: center;
-}
-.x {
-  display: inline-block;
-  color: white;
-  text-align: center;
-  padding: 14px;
-  text-decoration: none;
 }
 </style>
