@@ -12,8 +12,8 @@
 export default {
   data() {
     return {
-      client_id: "d267cedeee0f49f7aa8a7d78dc43ab47",
-      secret: "7937a13f48b04234a89e80afbc0a7b00",
+      client_id: "",
+      secret: "",
       code: "",
       scopes:
         "user-read-private user-read-email playlist-read-private playlist-modify-public playlist-modify-private user-library-read",
